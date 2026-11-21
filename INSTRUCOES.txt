@@ -1,0 +1,43 @@
+MEMORIAL LABRIGA — PUBLICAÇÃO SIMPLES (GitHub Pages + Supabase)
+
+ESTE PACOTE JÁ TEM A URL E A CHAVE PUBLICÁVEL PREENCHIDAS.
+Não é necessário editar o arquivo config.js.
+
+PASSO 1 — PUBLICAR
+1. Extraia o ZIP no celular ou computador (NÃO suba o ZIP inteiro no repositório).
+2. Abra seu repositório no GitHub e faça backup da versão anterior do site.
+3. Escolha Add file > Upload files na raiz do repositório.
+4. Envie os arquivos index.html, admin.html, admin.js, sync.js, config.js, .nojekyll.
+   Se existir um index.html antigo, autorize a substituição pelo novo.
+5. Confirme em Commit changes. Aguarde o GitHub Pages publicar.
+
+PASSO 2 — CONFERIR
+6. Abra o endereço normal do site. Você verá um indicador de conexão.
+   "Online" significa que o site leu os dados do Supabase.
+   "Sem sincronização" significa que precisa conferir importações ou permissões.
+7. Para administrar, acrescente /admin.html ao final do endereço da pasta.
+
+PASSO 3 — AUTORIZAR SEU USUÁRIO ADMINISTRADOR
+8. No Supabase > Authentication > Users, crie seu usuário com e-mail e senha.
+9. No SQL Editor, execute, SUBSTITUINDO o e-mail pelo endereço que cadastrou:
+
+insert into public.admin_users (user_id)
+select id from auth.users where email = 'SEU_EMAIL_CADASTRADO'
+on conflict (user_id) do nothing;
+
+10. Entre em admin.html com o mesmo e-mail e senha. Depois disso é possível
+    cadastrar placares e campeonatos sem editar a planilha.
+
+SEGURANÇA
+- A chave sb_publishable_... é pública por design; pode ficar no config.js.
+- NUNCA coloque sua senha, chave sb_secret_... ou service_role no GitHub.
+- Apenas contas cadastradas em public.admin_users podem editar via painel.
+- Escudos: o SQL já possui a tabela clubs e o bucket labriga-escudos; o botão
+  de cadastrar/enviar escudos ainda NÃO está implementado nesta versão.
+
+IMPORTANTE
+- Este pacote é a versão do site para PUBLICAR, não inclui os CSVs da
+  importação. Use os CSVs que você já importou no Supabase.
+- O site precisa de acesso ao Supabase para estar online. Se não conseguir
+  carregar a base, mostra um aviso e permanece com os dados locais antigos.
+- Para estatísticas atualizadas, o site lê o Supabase quando a página abre.
